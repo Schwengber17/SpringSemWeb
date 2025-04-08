@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.cglib.core.Local;
 
-import br.com.alura.screenmatch.Model.DadosEpisodeo;
+import br.com.alura.screenmatch.Model.DadosEpisodio;
 import br.com.alura.screenmatch.Model.DadosFilme;
 import br.com.alura.screenmatch.Model.DadosSerie;
 import br.com.alura.screenmatch.Model.DadosTemporada;
-import br.com.alura.screenmatch.Model.Episodeo;
+import br.com.alura.screenmatch.Model.Episodio;
 import br.com.alura.screenmatch.Service.ConsumoApi;
 import br.com.alura.screenmatch.Service.ConverterDados;
 
@@ -65,23 +65,23 @@ public class Principal {
     // Criar metodo para criar lista de episodios
 
     public void mediaAvaliacao(DadosSerie serie) {
-        List<Episodeo> episodeos = listaTemporadas.stream()
-                .flatMap(t -> t.episodeos().stream()
-                        .map(e -> new Episodeo(t.numero(), e)))
+        List<Episodio> episodios = listaTemporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(e -> new Episodio(t.numero(), e)))
                 .collect(Collectors.toList());
         System.out.println("Média de avaliação por temporada: ");
-        Map<Integer, String> avaliacoesTemp = episodeos.stream()
+        Map<Integer, String> avaliacoesTemp = episodios.stream()
                 .filter(e -> e.getAvaliacao() != null && e.getAvaliacao() > 0.0)
-                .collect(Collectors.groupingBy(Episodeo::getTemporada,
-                        Collectors.averagingDouble(Episodeo::getAvaliacao)))
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        Collectors.averagingDouble(Episodio::getAvaliacao)))
                 .entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         entry -> String.format("%.1f", entry.getValue())));
         System.out.println(avaliacoesTemp);
         // Por Estatistica do Spring
-        DoubleSummaryStatistics est = episodeos.stream()
+        DoubleSummaryStatistics est = episodios.stream()
                 .filter(e -> e.getAvaliacao() > 0.0)
-                .collect(Collectors.summarizingDouble(Episodeo::getAvaliacao));
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
         System.out.println("Média: " + est.getAverage());
         System.out.println("Melhor episódio: " + est.getMax());
         System.out.println("Pior episódio: " + est.getMin());
@@ -92,40 +92,40 @@ public class Principal {
         List<DadosTemporada> dadosTemporada = criaListaTemporadas(dadosSerie);
         for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
             System.out.println("Temporada: " + dadosTemporada.get(i - 1).numero() + " - Episódios: "
-                    + dadosTemporada.get(i - 1).episodeos().size());
+                    + dadosTemporada.get(i - 1).episodios().size());
         }
     }
 
-    public void verEpisodeosDasTemporadas(DadosSerie dadosSerie) {
+    public void verEpisodiosDasTemporadas(DadosSerie dadosSerie) {
         listaTemporadas
-                .forEach(t -> t.episodeos().forEach(e -> System.out.println(t.numero() + " Temporada " + e.title())));
+                .forEach(t -> t.episodios().forEach(e -> System.out.println(t.numero() + " Temporada " + e.title())));
     }
 
     public void verEpAfterYear(DadosSerie dadosSerie, Integer ano) {
         LocalDate dataBusca = LocalDate.of(ano, 1, 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        List<Episodeo> episodeos = listaTemporadas.stream()
-                .flatMap(t -> t.episodeos().stream()
-                        .map(e -> new Episodeo(t.numero(), e)))
+        List<Episodio> episodios = listaTemporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(e -> new Episodio(t.numero(), e)))
                 .collect(Collectors.toList());
-        episodeos.stream()
+        episodios.stream()
                 .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
-                .sorted(Comparator.comparing(Episodeo::getDataLancamento))
+                .sorted(Comparator.comparing(Episodio::getDataLancamento))
                 .forEach(e -> System.out.println(
                         e.getTemporada() + " - " + e.getTitulo() + " - " + e.getDataLancamento().format(formatter)));
     }
 
     public void DadosEpNome(DadosSerie dadosSerie, String nomeEpisodio) {
-        List<Episodeo> episodeos = listaTemporadas.stream()
-                .flatMap(t -> t.episodeos().stream()
-                        .map(e -> new Episodeo(t.numero(), e)))
+        List<Episodio> episodios = listaTemporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(e -> new Episodio(t.numero(), e)))
                 .collect(Collectors.toList());
-        Optional<Episodeo> epBusca = episodeos.stream()
+        Optional<Episodio> epBusca = episodios.stream()
                 .filter(e -> e.getTitulo().toUpperCase().contains(nomeEpisodio.toUpperCase()))
                 .findFirst();
 
         if (epBusca.isPresent()) {
-            Episodeo episodio = epBusca.get();
+            Episodio episodio = epBusca.get();
             System.out.println("Episódio encontrado: " + episodio.getTemporada() + " - " + episodio.getTitulo() + " - "
                     + episodio.getDataLancamento());
         } else {
@@ -168,7 +168,7 @@ public class Principal {
                 verTemporadas(dadosSerie);
                 break;
             case 2:
-                verEpisodeosDasTemporadas(dadosSerie);
+                verEpisodiosDasTemporadas(dadosSerie);
                 break;
             case 3:
                 // Em vez de pedir o ano aqui, pedir no método

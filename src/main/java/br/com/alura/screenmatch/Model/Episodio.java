@@ -3,7 +3,7 @@ package br.com.alura.screenmatch.Model;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
-public class Episodeo {
+public class Episodio {
     private Integer temporada;
     private Integer numero;
     private String titulo;
@@ -11,7 +11,7 @@ public class Episodeo {
     private Double avaliacao;
     private LocalDate dataLancamento;
 
-    public Episodeo(Integer numeroTemporada, DadosEpisodeo dadosEpisodeo){
+    public Episodio(Integer numeroTemporada, DadosEpisodio dadosEpisodeo){
         this.temporada = numeroTemporada;
         this.numero = dadosEpisodeo.episodio();
         this.titulo = dadosEpisodeo.title();
@@ -45,12 +45,7 @@ public class Episodeo {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
-    // public String getResumo() {
-    //     return resumo;
-    // }
-    // public void setResumo(String resumo) {
-    //     this.resumo = resumo;
-    // }
+
     public Double getAvaliacao() {
         return avaliacao;
     }
@@ -66,7 +61,7 @@ public class Episodeo {
 
     @Override
     public String toString() {
-        return "Episodeo [temporada=" + temporada + ", numero=" + numero + ", titulo=" + titulo + ", avaliacao="
+        return "Episodio [temporada=" + temporada + ", numero=" + numero + ", titulo=" + titulo + ", avaliacao="
                 + avaliacao + ", dataLancamento=" + dataLancamento + "]";
     }
 }
